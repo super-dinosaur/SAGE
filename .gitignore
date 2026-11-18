@@ -1,0 +1,16 @@
+# OS / Python junk
+.DS_Store
+__pycache__/
+*.pyc
+
+# never commit secrets
+.env
+*.key
+
+# API response caches and logs (regenerable)
+runs/*.sqlite
+runs/*.log
+
+# mock run is regenerated in ~1s:  python3 -m commtree build --config configs/mock.yaml --out runs/mock
+runs/mock/
+runs/tmp/

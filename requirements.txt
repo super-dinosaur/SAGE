@@ -1,0 +1,5 @@
+# Core pipeline uses only the Python standard library (Python >= 3.10).
+pyyaml>=6.0        # only needed for .yaml configs
+# optional:
+# tiktoken         # cost.tokenizer: tiktoken
+# transformers     # cost.tokenizer: hf:<model>

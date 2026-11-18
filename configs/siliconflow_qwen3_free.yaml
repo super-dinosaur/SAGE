@@ -1,0 +1,43 @@
+# Pilot on SiliconFlow's free Qwen3 model (all four roles use Qwen/Qwen3-8B).
+# export SILICONFLOW_API_KEY=sk-...   before running.
+# Note: SiliconFlow returns no logprobs for this model -> action_logprob = null,
+#       need_info falls back to the label A actually sampled.
+run:
+  seed: 0
+  n: 2
+  m: 3
+  K: 4
+  k_init: null
+  max_steps: 10
+  keep_pruned_scores: true
+  max_api_calls: 3000
+  behavior_policy: Qwen3-8B@v0
+  lam_gen: 0.05
+
+exploration: {p_high: 0.8, p_low: 0.2, p_root: 1.0, need_info_threshold: 0.5, max_roots_per_scenario: 2, max_children_per_branch: 1}
+
+scenarios: {n: 3, seed: 0, mix: {A_self: 0.34, B_key: 0.33, C_key: 0.33}, stale_prob: 0.3, cross_owner_prob: 0.15, two_hop_prob: 0.6}
+
+pruner: {type: llm, explore_eps: 0.1}
+
+backends:
+  default:
+    type: openai_compat
+    model: Qwen/Qwen3-8B
+    base_url: https://api.siliconflow.cn/v1
+    api_key_env: SILICONFLOW_API_KEY
+    temperature: 0.7
+    max_concurrency: 8
+    timeout: 90
+    max_retries: 4
+    logprobs: false
+    extra: {enable_thinking: false}
+  roles:
+    A: default
+    B: {type: openai_compat, model: Qwen/Qwen3-8B, base_url: https://api.siliconflow.cn/v1, api_key_env: SILICONFLOW_API_KEY, temperature: 0.3, max_concurrency: 8, timeout: 90, logprobs: false, extra: {enable_thinking: false}}
+    C: {type: openai_compat, model: Qwen/Qwen3-8B, base_url: https://api.siliconflow.cn/v1, api_key_env: SILICONFLOW_API_KEY, temperature: 0.3, max_concurrency: 8, timeout: 90, logprobs: false, extra: {enable_thinking: false}}
+    pruner: {type: openai_compat, model: Qwen/Qwen3-8B, base_url: https://api.siliconflow.cn/v1, api_key_env: SILICONFLOW_API_KEY, temperature: 0.0, max_concurrency: 8, timeout: 90, logprobs: false, extra: {enable_thinking: false}}
+
+cache: runs/cache_qwen3_free.sqlite
+cost: {tokenizer: regex}
+export: {lam: 0.05}

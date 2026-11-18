@@ -1,0 +1,48 @@
+# Offline run with seeded simulators: no API key needed. Use it to check the pipeline end to end.
+run:
+  seed: 0
+  n: 3                    # max tree depth (branching layers)
+  m: 3                    # actions tried per decision point (all three)
+  K: 8                    # rollouts per action
+  k_init: null            # e.g. 4 -> adaptive: 4 rollouts first, top up to K only where NO_COMM is not clearly best
+  max_steps: 12           # max A actions per episode (independent of n)
+  keep_pruned_scores: true
+  max_api_calls: null
+  behavior_policy: A-v0   # version label of role A (the continuation policy)
+  lam_gen: 0.05           # λ used only by score-based pruning / early stopping; recorded in tree meta
+
+exploration:              # decision-point sampling (spec §7)
+  p_high: 0.8
+  p_low: 0.2
+  p_root: 1.0
+  need_info_threshold: 0.5
+  max_roots_per_scenario: 3
+  max_children_per_branch: 1
+
+scenarios:
+  n: 30
+  seed: 0
+  mix: {A_self: 0.3, B_key: 0.35, C_key: 0.35}
+  stale_prob: 0.3
+  cross_owner_prob: 0.15
+  two_hop_prob: 0.6
+  # file: runs/scenarios.jsonl   # use a fixed scenario file instead of sampling
+
+pruner: {type: threshold, thr: 0.2, lam: 0.05}
+# pruner: {type: llm, explore_eps: 0.1}
+# pruner: {type: hybrid, thr: 0.2, lam: 0.05, z: 1.0}
+# pruner: {type: nobranch}
+
+backends:
+  default: {type: mock}
+  roles: {A: default, B: default, C: default, pruner: default}
+
+mock:                     # simulator knobs
+  p_notice_stale: 0.5
+  p_good_question: 0.85
+  responder_verbose: 0.3
+  responder_noise: 0.0
+  prune_min_prob: 0.12
+
+cost: {tokenizer: regex}  # regex | tiktoken | hf:<model name>
+export: {lam: 0.05}

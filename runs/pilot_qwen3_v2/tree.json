@@ -1,0 +1,1987 @@
+{
+  "meta": {
+    "config": {
+      "schema": "commtree/1",
+      "desc": "Communication Decision",
+      "task": "distributed_fact_qa",
+      "n": 2,
+      "m": 3,
+      "K": 4,
+      "k_init": null,
+      "max_steps": 10,
+      "seed": 0,
+      "keep_pruned_scores": true,
+      "pruner": {
+        "type": "llm",
+        "explore_eps": 0.1
+      },
+      "lam_gen": 0.05,
+      "early_stop_z": 2.0,
+      "behavior_policy": "Qwen3-8B@v0",
+      "exploration": {
+        "p_high": 0.8,
+        "p_low": 0.2,
+        "p_root": 1.0,
+        "need_info_threshold": 0.5,
+        "max_roots_per_scenario": 2,
+        "max_children_per_branch": 1
+      },
+      "tokenizer": "regex",
+      "backends": {
+        "A": "openai_compat:Qwen/Qwen3-8B|https://api.siliconflow.cn/v1|0.7|{\"enable_thinking\": false}",
+        "B": "openai_compat:Qwen/Qwen3-8B|https://api.siliconflow.cn/v1|0.3|{\"enable_thinking\": false}",
+        "C": "openai_compat:Qwen/Qwen3-8B|https://api.siliconflow.cn/v1|0.3|{\"enable_thinking\": false}",
+        "pruner": "openai_compat:Qwen/Qwen3-8B|https://api.siliconflow.cn/v1|0.0|{\"enable_thinking\": false}"
+      }
+    },
+    "config_hash": "64f0783cdc24fe7b",
+    "n_scenarios": 3,
+    "api_stats": {
+      "api_calls": 839,
+      "cache_hits": 8,
+      "errors": 0,
+      "by_role": {
+        "A": 742,
+        "C": 46,
+        "pruner": 24,
+        "B": 27
+      }
+    }
+  },
+  "trees": [
+    {
+      "scenario_id": "ep_0000",
+      "scenario_type": "B_key",
+      "behavior_trajectory_id": "ep_0000.behavior",
+      "behavior_result": {
+        "R_task": 0,
+        "C_comm": 0.0,
+        "comm_tokens": 0,
+        "n_steps": 8,
+        "n_asks": {
+          "B": 0,
+          "C": 0
+        },
+        "final_answer": "New York City"
+      },
+      "roots": [
+        {
+          "state_id": "ep_0000_t0",
+          "scenario_id": "ep_0000",
+          "scenario_type": "B_key",
+          "depth": 0,
+          "step": 0,
+          "parent": null,
+          "policy_input": "[system]\nYou are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code).\n\n[user]\nTask question: In which city is the lead of Project Quill based?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 1 of 10.\nHistory of your actions and observations:\n(none yet)\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:",
+          "policy_messages": [
+            {
+              "role": "system",
+              "content": "You are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code)."
+            },
+            {
+              "role": "user",
+              "content": "Task question: In which city is the lead of Project Quill based?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 1 of 10.\nHistory of your actions and observations:\n(none yet)\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:"
+            }
+          ],
+          "sample_prob": 1.0,
+          "need_info": false,
+          "behavior_policy": "Qwen3-8B@v0",
+          "action_logprobs": null,
+          "children": {
+            "NO_COMM": {
+              "action": "NO_COMM",
+              "status": "expand",
+              "prune_decision": "EXPAND",
+              "prune_reason": "unparseable pruner reply; default EXPAND ('NO_COMM - I can use LOOKUP to find information about the lead of Project Quill i')",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 39116195,
+                  "R_task": 0,
+                  "C_comm": 0.0,
+                  "n_steps": 10,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t0.NO_COMM.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 837966645,
+                  "R_task": 0,
+                  "C_comm": 0.0,
+                  "n_steps": 10,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t0.NO_COMM.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 1952740530,
+                  "R_task": 0,
+                  "C_comm": 0.0,
+                  "n_steps": 10,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t0.NO_COMM.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 333329630,
+                  "R_task": 0,
+                  "C_comm": 0.0,
+                  "n_steps": 7,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t0.NO_COMM.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 0.0,
+              "R_task_std": 0.0,
+              "C_comm_mean": 0.0,
+              "C_comm_std": 0.0,
+              "n_steps_mean": 9.25,
+              "subtree": [
+                {
+                  "state_id": "ep_0000_t0.NO_COMM_t1",
+                  "scenario_id": "ep_0000",
+                  "scenario_type": "B_key",
+                  "depth": 1,
+                  "step": 1,
+                  "parent": {
+                    "state_id": "ep_0000_t0",
+                    "action": "NO_COMM"
+                  },
+                  "policy_input": "[system]\nYou are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code).\n\n[user]\nTask question: In which city is the lead of Project Quill based?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 2 of 10.\nHistory of your actions and observations:\n1. LOOKUP: Project Quill\n   result: [as of 2019] Project Quill is led by Zara Ahmed.\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:",
+                  "policy_messages": [
+                    {
+                      "role": "system",
+                      "content": "You are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code)."
+                    },
+                    {
+                      "role": "user",
+                      "content": "Task question: In which city is the lead of Project Quill based?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 2 of 10.\nHistory of your actions and observations:\n1. LOOKUP: Project Quill\n   result: [as of 2019] Project Quill is led by Zara Ahmed.\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:"
+                    }
+                  ],
+                  "sample_prob": 0.2,
+                  "need_info": false,
+                  "behavior_policy": "Qwen3-8B@v0",
+                  "action_logprobs": null,
+                  "children": {
+                    "NO_COMM": {
+                      "action": "NO_COMM",
+                      "status": "prune",
+                      "prune_decision": "PRUNE",
+                      "prune_reason": "The lead of Project Quill is already identified as Zara Ahmed, so the next step is to LOOKUP Zara Ahmed's location to answer the task question.",
+                      "explore_override": false,
+                      "rollouts": [
+                        {
+                          "k": 0,
+                          "seed": 127585604,
+                          "R_task": 0,
+                          "C_comm": 0.0,
+                          "n_steps": 7,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 0
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.NO_COMM_t1.NO_COMM.k0"
+                        },
+                        {
+                          "k": 1,
+                          "seed": 1825155480,
+                          "R_task": 0,
+                          "C_comm": 0.0,
+                          "n_steps": 8,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 0
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.NO_COMM_t1.NO_COMM.k1"
+                        },
+                        {
+                          "k": 2,
+                          "seed": 1046294553,
+                          "R_task": 0,
+                          "C_comm": 0.0,
+                          "n_steps": 8,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 0
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.NO_COMM_t1.NO_COMM.k2"
+                        },
+                        {
+                          "k": 3,
+                          "seed": 560370145,
+                          "R_task": 0,
+                          "C_comm": 0.0,
+                          "n_steps": 8,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 0
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.NO_COMM_t1.NO_COMM.k3"
+                        }
+                      ],
+                      "n": 4,
+                      "R_task_mean": 0.0,
+                      "R_task_std": 0.0,
+                      "C_comm_mean": 0.0,
+                      "C_comm_std": 0.0,
+                      "n_steps_mean": 7.75,
+                      "subtree": [],
+                      "expanded": false
+                    },
+                    "ASK_B": {
+                      "action": "ASK_B",
+                      "status": "prune",
+                      "prune_decision": "PRUNE",
+                      "prune_reason": "Asking B is not informative since the lead of Project Quill is already known to be Zara Ahmed from the LOOKUP result. The next step should be to look up Zara Ahmed's location.",
+                      "explore_override": false,
+                      "rollouts": [
+                        {
+                          "k": 0,
+                          "seed": 224025930,
+                          "R_task": 0,
+                          "C_comm": 0.14,
+                          "n_steps": 9,
+                          "n_asks": {
+                            "B": 1,
+                            "C": 0
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.NO_COMM_t1.ASK_B.k0"
+                        },
+                        {
+                          "k": 1,
+                          "seed": 1443161310,
+                          "R_task": 0,
+                          "C_comm": 0.14,
+                          "n_steps": 10,
+                          "n_asks": {
+                            "B": 1,
+                            "C": 0
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.NO_COMM_t1.ASK_B.k1"
+                        },
+                        {
+                          "k": 2,
+                          "seed": 1223823122,
+                          "R_task": 0,
+                          "C_comm": 0.14,
+                          "n_steps": 10,
+                          "n_asks": {
+                            "B": 1,
+                            "C": 0
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.NO_COMM_t1.ASK_B.k2"
+                        },
+                        {
+                          "k": 3,
+                          "seed": 1254461653,
+                          "R_task": 0,
+                          "C_comm": 0.14,
+                          "n_steps": 9,
+                          "n_asks": {
+                            "B": 1,
+                            "C": 0
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.NO_COMM_t1.ASK_B.k3"
+                        }
+                      ],
+                      "n": 4,
+                      "R_task_mean": 0.0,
+                      "R_task_std": 0.0,
+                      "C_comm_mean": 0.14,
+                      "C_comm_std": 0.0,
+                      "n_steps_mean": 9.5,
+                      "subtree": [],
+                      "expanded": false
+                    },
+                    "ASK_C": {
+                      "action": "ASK_C",
+                      "status": "prune",
+                      "prune_decision": "PRUNE",
+                      "prune_reason": "The LOOKUP already identified Zara Ahmed as the lead of Project Quill, so asking C is unnecessary.",
+                      "explore_override": false,
+                      "rollouts": [
+                        {
+                          "k": 0,
+                          "seed": 44586359,
+                          "R_task": 1,
+                          "C_comm": 0.27,
+                          "n_steps": 4,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 1
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.NO_COMM_t1.ASK_C.k0"
+                        },
+                        {
+                          "k": 1,
+                          "seed": 543654805,
+                          "R_task": 1,
+                          "C_comm": 0.27,
+                          "n_steps": 4,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 1
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.NO_COMM_t1.ASK_C.k1"
+                        },
+                        {
+                          "k": 2,
+                          "seed": 1233519612,
+                          "R_task": 1,
+                          "C_comm": 0.27,
+                          "n_steps": 4,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 1
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.NO_COMM_t1.ASK_C.k2"
+                        },
+                        {
+                          "k": 3,
+                          "seed": 1193637731,
+                          "R_task": 1,
+                          "C_comm": 0.13,
+                          "n_steps": 5,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 1
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.NO_COMM_t1.ASK_C.k3"
+                        }
+                      ],
+                      "n": 4,
+                      "R_task_mean": 1.0,
+                      "R_task_std": 0.0,
+                      "C_comm_mean": 0.235,
+                      "C_comm_std": 0.060622,
+                      "n_steps_mean": 4.25,
+                      "subtree": [],
+                      "expanded": false
+                    }
+                  },
+                  "dropped": [],
+                  "siblings_complete": true
+                }
+              ],
+              "expanded": true
+            },
+            "ASK_B": {
+              "action": "ASK_B",
+              "status": "expand",
+              "prune_decision": "PRUNE",
+              "prune_reason": "Asking B is not informative for finding the lead of Project Quill, as B's expertise is in People Ops (employee locations and management) rather than project leadership. The lead of a project is more likely to be known by C, the Project Office.",
+              "explore_override": true,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 1692877875,
+                  "R_task": 1,
+                  "C_comm": 0.17,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t0.ASK_B.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 1291135310,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t0.ASK_B.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 1340723736,
+                  "R_task": 1,
+                  "C_comm": 0.28,
+                  "n_steps": 2,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t0.ASK_B.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 1363170100,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t0.ASK_B.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 1.0,
+              "R_task_std": 0.0,
+              "C_comm_mean": 0.1775,
+              "C_comm_std": 0.06139,
+              "n_steps_mean": 2.75,
+              "subtree": [],
+              "expanded": true
+            },
+            "ASK_C": {
+              "action": "ASK_C",
+              "status": "expand",
+              "prune_decision": "EXPAND",
+              "prune_reason": "Asking C is directly relevant because C knows who leads each project, which is necessary to identify the lead of Project Quill.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 753498249,
+                  "R_task": 0,
+                  "C_comm": 0.17,
+                  "n_steps": 6,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t0.ASK_C.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 1766830657,
+                  "R_task": 0,
+                  "C_comm": 0.2,
+                  "n_steps": 6,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t0.ASK_C.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 1041756341,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t0.ASK_C.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 1574781802,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t0.ASK_C.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 0.5,
+              "R_task_std": 0.5,
+              "C_comm_mean": 0.1575,
+              "C_comm_std": 0.029475,
+              "n_steps_mean": 4.5,
+              "subtree": [
+                {
+                  "state_id": "ep_0000_t0.ASK_C_t1",
+                  "scenario_id": "ep_0000",
+                  "scenario_type": "B_key",
+                  "depth": 1,
+                  "step": 1,
+                  "parent": {
+                    "state_id": "ep_0000_t0",
+                    "action": "ASK_C"
+                  },
+                  "policy_input": "[system]\nYou are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code).\n\n[user]\nTask question: In which city is the lead of Project Quill based?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 2 of 10.\nHistory of your actions and observations:\n1. ASK_C: Which city is the lead of Project Quill based in?\n   C replied: I don't know.\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:",
+                  "policy_messages": [
+                    {
+                      "role": "system",
+                      "content": "You are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code)."
+                    },
+                    {
+                      "role": "user",
+                      "content": "Task question: In which city is the lead of Project Quill based?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 2 of 10.\nHistory of your actions and observations:\n1. ASK_C: Which city is the lead of Project Quill based in?\n   C replied: I don't know.\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:"
+                    }
+                  ],
+                  "sample_prob": 0.2,
+                  "need_info": false,
+                  "behavior_policy": "Qwen3-8B@v0",
+                  "action_logprobs": null,
+                  "children": {
+                    "NO_COMM": {
+                      "action": "NO_COMM",
+                      "status": "prune",
+                      "prune_decision": "PRUNE",
+                      "prune_reason": "The candidate action \"NO_COMM\" is not informative because the task requires finding the city where the lead of Project Quill is based, and the information is not available in the private notes without further exploration or communication.",
+                      "explore_override": false,
+                      "rollouts": [
+                        {
+                          "k": 0,
+                          "seed": 534546661,
+                          "R_task": 0,
+                          "C_comm": 0.17,
+                          "n_steps": 5,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 1
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.ASK_C_t1.NO_COMM.k0"
+                        },
+                        {
+                          "k": 1,
+                          "seed": 1793424228,
+                          "R_task": 0,
+                          "C_comm": 0.17,
+                          "n_steps": 6,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 1
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.ASK_C_t1.NO_COMM.k1"
+                        },
+                        {
+                          "k": 2,
+                          "seed": 2132532357,
+                          "R_task": 0,
+                          "C_comm": 0.17,
+                          "n_steps": 5,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 1
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.ASK_C_t1.NO_COMM.k2"
+                        },
+                        {
+                          "k": 3,
+                          "seed": 433773405,
+                          "R_task": 0,
+                          "C_comm": 0.17,
+                          "n_steps": 6,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 1
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.ASK_C_t1.NO_COMM.k3"
+                        }
+                      ],
+                      "n": 4,
+                      "R_task_mean": 0.0,
+                      "R_task_std": 0.0,
+                      "C_comm_mean": 0.17,
+                      "C_comm_std": 0.0,
+                      "n_steps_mean": 5.5,
+                      "subtree": [],
+                      "expanded": false
+                    },
+                    "ASK_B": {
+                      "action": "ASK_B",
+                      "status": "prune",
+                      "prune_decision": "PRUNE",
+                      "prune_reason": "ASK_B is not informative because B's expertise is in People Ops, which covers employee locations and management, but not project leads. The question is about the lead of Project Quill, which is within C's domain.",
+                      "explore_override": false,
+                      "rollouts": [
+                        {
+                          "k": 0,
+                          "seed": 649995007,
+                          "R_task": 1,
+                          "C_comm": 0.34,
+                          "n_steps": 4,
+                          "n_asks": {
+                            "B": 1,
+                            "C": 1
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.ASK_C_t1.ASK_B.k0"
+                        },
+                        {
+                          "k": 1,
+                          "seed": 470703107,
+                          "R_task": 1,
+                          "C_comm": 0.35,
+                          "n_steps": 4,
+                          "n_asks": {
+                            "B": 1,
+                            "C": 1
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.ASK_C_t1.ASK_B.k1"
+                        },
+                        {
+                          "k": 2,
+                          "seed": 334927053,
+                          "R_task": 1,
+                          "C_comm": 0.35,
+                          "n_steps": 4,
+                          "n_asks": {
+                            "B": 1,
+                            "C": 1
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.ASK_C_t1.ASK_B.k2"
+                        },
+                        {
+                          "k": 3,
+                          "seed": 325768071,
+                          "R_task": 1,
+                          "C_comm": 0.34,
+                          "n_steps": 4,
+                          "n_asks": {
+                            "B": 1,
+                            "C": 1
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.ASK_C_t1.ASK_B.k3"
+                        }
+                      ],
+                      "n": 4,
+                      "R_task_mean": 1.0,
+                      "R_task_std": 0.0,
+                      "C_comm_mean": 0.345,
+                      "C_comm_std": 0.005,
+                      "n_steps_mean": 4.0,
+                      "subtree": [],
+                      "expanded": false
+                    },
+                    "ASK_C": {
+                      "action": "ASK_C",
+                      "status": "prune",
+                      "prune_decision": "PRUNE",
+                      "prune_reason": "C already replied that they don't know, so asking them again is redundant.",
+                      "explore_override": false,
+                      "rollouts": [
+                        {
+                          "k": 0,
+                          "seed": 254311814,
+                          "R_task": 1,
+                          "C_comm": 0.3,
+                          "n_steps": 4,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 2
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.ASK_C_t1.ASK_C.k0"
+                        },
+                        {
+                          "k": 1,
+                          "seed": 2069941554,
+                          "R_task": 1,
+                          "C_comm": 0.3,
+                          "n_steps": 4,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 2
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.ASK_C_t1.ASK_C.k1"
+                        },
+                        {
+                          "k": 2,
+                          "seed": 1467984337,
+                          "R_task": 1,
+                          "C_comm": 0.3,
+                          "n_steps": 4,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 2
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.ASK_C_t1.ASK_C.k2"
+                        },
+                        {
+                          "k": 3,
+                          "seed": 1304856638,
+                          "R_task": 1,
+                          "C_comm": 0.3,
+                          "n_steps": 4,
+                          "n_asks": {
+                            "B": 0,
+                            "C": 2
+                          },
+                          "action_logprob": null,
+                          "trajectory_id": "ep_0000_t0.ASK_C_t1.ASK_C.k3"
+                        }
+                      ],
+                      "n": 4,
+                      "R_task_mean": 1.0,
+                      "R_task_std": 0.0,
+                      "C_comm_mean": 0.3,
+                      "C_comm_std": 0.0,
+                      "n_steps_mean": 4.0,
+                      "subtree": [],
+                      "expanded": false
+                    }
+                  },
+                  "dropped": [],
+                  "siblings_complete": true
+                }
+              ],
+              "expanded": true
+            }
+          },
+          "dropped": [],
+          "siblings_complete": true
+        },
+        {
+          "state_id": "ep_0000_t1",
+          "scenario_id": "ep_0000",
+          "scenario_type": "B_key",
+          "depth": 0,
+          "step": 1,
+          "parent": null,
+          "policy_input": "[system]\nYou are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code).\n\n[user]\nTask question: In which city is the lead of Project Quill based?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 2 of 10.\nHistory of your actions and observations:\n1. LOOKUP: Project Quill\n   result: [as of 2019] Project Quill is led by Zara Ahmed.\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:",
+          "policy_messages": [
+            {
+              "role": "system",
+              "content": "You are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code)."
+            },
+            {
+              "role": "user",
+              "content": "Task question: In which city is the lead of Project Quill based?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 2 of 10.\nHistory of your actions and observations:\n1. LOOKUP: Project Quill\n   result: [as of 2019] Project Quill is led by Zara Ahmed.\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:"
+            }
+          ],
+          "sample_prob": 0.2,
+          "need_info": false,
+          "behavior_policy": "Qwen3-8B@v0",
+          "action_logprobs": null,
+          "children": {
+            "NO_COMM": {
+              "action": "NO_COMM",
+              "status": "prune",
+              "prune_decision": "PRUNE",
+              "prune_reason": "The lead of Project Quill is already identified as Zara Ahmed, so the next step is to LOOKUP Zara Ahmed's location to answer the task question.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 1186892276,
+                  "R_task": 0,
+                  "C_comm": 0.0,
+                  "n_steps": 8,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t1.NO_COMM.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 639704147,
+                  "R_task": 0,
+                  "C_comm": 0.0,
+                  "n_steps": 8,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t1.NO_COMM.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 2041024680,
+                  "R_task": 0,
+                  "C_comm": 0.0,
+                  "n_steps": 10,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t1.NO_COMM.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 340389955,
+                  "R_task": 0,
+                  "C_comm": 0.0,
+                  "n_steps": 10,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t1.NO_COMM.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 0.0,
+              "R_task_std": 0.0,
+              "C_comm_mean": 0.0,
+              "C_comm_std": 0.0,
+              "n_steps_mean": 9.0,
+              "subtree": [],
+              "expanded": false
+            },
+            "ASK_B": {
+              "action": "ASK_B",
+              "status": "prune",
+              "prune_decision": "PRUNE",
+              "prune_reason": "Asking B is not informative since the lead of Project Quill is already known to be Zara Ahmed from the LOOKUP result. The next step should be to look up Zara Ahmed's location.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 814702639,
+                  "R_task": 0,
+                  "C_comm": 0.14,
+                  "n_steps": 10,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t1.ASK_B.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 675320232,
+                  "R_task": 0,
+                  "C_comm": 0.14,
+                  "n_steps": 10,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t1.ASK_B.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 1561699506,
+                  "R_task": 0,
+                  "C_comm": 0.14,
+                  "n_steps": 9,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t1.ASK_B.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 736236363,
+                  "R_task": 0,
+                  "C_comm": 0.14,
+                  "n_steps": 9,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t1.ASK_B.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 0.0,
+              "R_task_std": 0.0,
+              "C_comm_mean": 0.14,
+              "C_comm_std": 0.0,
+              "n_steps_mean": 9.5,
+              "subtree": [],
+              "expanded": false
+            },
+            "ASK_C": {
+              "action": "ASK_C",
+              "status": "prune",
+              "prune_decision": "PRUNE",
+              "prune_reason": "The LOOKUP already identified Zara Ahmed as the lead of Project Quill, so asking C is unnecessary.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 922198667,
+                  "R_task": 0,
+                  "C_comm": 0.14,
+                  "n_steps": 10,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t1.ASK_C.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 1491662759,
+                  "R_task": 0,
+                  "C_comm": 0.14,
+                  "n_steps": 10,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t1.ASK_C.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 1415085399,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 5,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t1.ASK_C.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 958816108,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 5,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0000_t1.ASK_C.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 0.5,
+              "R_task_std": 0.5,
+              "C_comm_mean": 0.135,
+              "C_comm_std": 0.005,
+              "n_steps_mean": 7.5,
+              "subtree": [],
+              "expanded": false
+            }
+          },
+          "dropped": [],
+          "siblings_complete": true
+        }
+      ]
+    },
+    {
+      "scenario_id": "ep_0001",
+      "scenario_type": "C_key",
+      "behavior_trajectory_id": "ep_0001.behavior",
+      "behavior_result": {
+        "R_task": 1,
+        "C_comm": 0.13,
+        "comm_tokens": 13,
+        "n_steps": 3,
+        "n_asks": {
+          "B": 0,
+          "C": 1
+        },
+        "final_answer": "BC-3633"
+      },
+      "roots": [
+        {
+          "state_id": "ep_0001_t0",
+          "scenario_id": "ep_0001",
+          "scenario_type": "C_key",
+          "depth": 0,
+          "step": 0,
+          "parent": null,
+          "policy_input": "[system]\nYou are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code).\n\n[user]\nTask question: Which budget code does Project Atlas use?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 1 of 10.\nHistory of your actions and observations:\n(none yet)\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:",
+          "policy_messages": [
+            {
+              "role": "system",
+              "content": "You are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code)."
+            },
+            {
+              "role": "user",
+              "content": "Task question: Which budget code does Project Atlas use?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 1 of 10.\nHistory of your actions and observations:\n(none yet)\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:"
+            }
+          ],
+          "sample_prob": 1.0,
+          "need_info": false,
+          "behavior_policy": "Qwen3-8B@v0",
+          "action_logprobs": null,
+          "children": {
+            "NO_COMM": {
+              "action": "NO_COMM",
+              "status": "expand",
+              "prune_decision": "EXPAND",
+              "prune_reason": "unparseable pruner reply; default EXPAND ('NO_COMM - I can directly look up the budget code for Project Atlas in my notes.')",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 1314531733,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t0.NO_COMM.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 1184566303,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t0.NO_COMM.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 440747201,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t0.NO_COMM.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 576663001,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t0.NO_COMM.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 1.0,
+              "R_task_std": 0.0,
+              "C_comm_mean": 0.13,
+              "C_comm_std": 0.0,
+              "n_steps_mean": 3.0,
+              "subtree": [],
+              "expanded": true
+            },
+            "ASK_B": {
+              "action": "ASK_B",
+              "status": "prune",
+              "prune_decision": "PRUNE",
+              "prune_reason": "Asking B is not informative for finding the budget code of Project Atlas, as B's expertise is in People Ops, not project budget codes. The relevant information is more likely to be found with C.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 132774166,
+                  "R_task": 1,
+                  "C_comm": 0.27,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t0.ASK_B.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 433395054,
+                  "R_task": 1,
+                  "C_comm": 0.28,
+                  "n_steps": 5,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t0.ASK_B.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 226235917,
+                  "R_task": 1,
+                  "C_comm": 0.32,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t0.ASK_B.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 265285744,
+                  "R_task": 1,
+                  "C_comm": 0.27,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t0.ASK_B.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 1.0,
+              "R_task_std": 0.0,
+              "C_comm_mean": 0.285,
+              "C_comm_std": 0.020616,
+              "n_steps_mean": 3.5,
+              "subtree": [],
+              "expanded": false
+            },
+            "ASK_C": {
+              "action": "ASK_C",
+              "status": "expand",
+              "prune_decision": "EXPAND",
+              "prune_reason": "Teammate C is the Project Office and knows budget codes, which is directly relevant to the task question.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 906663396,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 2,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t0.ASK_C.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 1517099508,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 2,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t0.ASK_C.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 990570266,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 2,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t0.ASK_C.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 476239081,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 2,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t0.ASK_C.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 1.0,
+              "R_task_std": 0.0,
+              "C_comm_mean": 0.13,
+              "C_comm_std": 0.0,
+              "n_steps_mean": 2.0,
+              "subtree": [],
+              "expanded": true
+            }
+          },
+          "dropped": [],
+          "siblings_complete": true
+        },
+        {
+          "state_id": "ep_0001_t1",
+          "scenario_id": "ep_0001",
+          "scenario_type": "C_key",
+          "depth": 0,
+          "step": 1,
+          "parent": null,
+          "policy_input": "[system]\nYou are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code).\n\n[user]\nTask question: Which budget code does Project Atlas use?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 2 of 10.\nHistory of your actions and observations:\n1. LOOKUP: Project Atlas\n   result: No matching notes.\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:",
+          "policy_messages": [
+            {
+              "role": "system",
+              "content": "You are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code)."
+            },
+            {
+              "role": "user",
+              "content": "Task question: Which budget code does Project Atlas use?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 2 of 10.\nHistory of your actions and observations:\n1. LOOKUP: Project Atlas\n   result: No matching notes.\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:"
+            }
+          ],
+          "sample_prob": 0.8,
+          "need_info": true,
+          "behavior_policy": "Qwen3-8B@v0",
+          "action_logprobs": null,
+          "children": {
+            "NO_COMM": {
+              "action": "NO_COMM",
+              "status": "prune",
+              "prune_decision": "PRUNE",
+              "prune_reason": "No matching notes from LOOKUP: Project Atlas, and since the task question is about a budget code, which is within C's domain, it is more efficient to ask C directly.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 92690268,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 4,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t1.NO_COMM.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 623433343,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 4,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t1.NO_COMM.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 264042545,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 4,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t1.NO_COMM.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 259126168,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 4,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t1.NO_COMM.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 1.0,
+              "R_task_std": 0.0,
+              "C_comm_mean": 0.13,
+              "C_comm_std": 0.0,
+              "n_steps_mean": 4.0,
+              "subtree": [],
+              "expanded": false
+            },
+            "ASK_B": {
+              "action": "ASK_B",
+              "status": "prune",
+              "prune_decision": "PRUNE",
+              "prune_reason": "Asking B is not informative as B does not have knowledge about budget codes, which is required to answer the task question.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 2112786791,
+                  "R_task": 1,
+                  "C_comm": 0.28,
+                  "n_steps": 4,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t1.ASK_B.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 653235470,
+                  "R_task": 1,
+                  "C_comm": 0.28,
+                  "n_steps": 5,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t1.ASK_B.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 1156112952,
+                  "R_task": 1,
+                  "C_comm": 0.32,
+                  "n_steps": 5,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t1.ASK_B.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 2142905875,
+                  "R_task": 1,
+                  "C_comm": 0.28,
+                  "n_steps": 5,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t1.ASK_B.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 1.0,
+              "R_task_std": 0.0,
+              "C_comm_mean": 0.29,
+              "C_comm_std": 0.017321,
+              "n_steps_mean": 4.75,
+              "subtree": [],
+              "expanded": false
+            },
+            "ASK_C": {
+              "action": "ASK_C",
+              "status": "expand",
+              "prune_decision": "EXPAND",
+              "prune_reason": "Teammate C is the Project Office and knows budget codes, which is directly relevant to the task question.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 1975646819,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t1.ASK_C.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 703678726,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t1.ASK_C.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 62295372,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t1.ASK_C.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 904976759,
+                  "R_task": 1,
+                  "C_comm": 0.13,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0001_t1.ASK_C.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 1.0,
+              "R_task_std": 0.0,
+              "C_comm_mean": 0.13,
+              "C_comm_std": 0.0,
+              "n_steps_mean": 3.0,
+              "subtree": [],
+              "expanded": true
+            }
+          },
+          "dropped": [],
+          "siblings_complete": true
+        }
+      ]
+    },
+    {
+      "scenario_id": "ep_0002",
+      "scenario_type": "A_self",
+      "behavior_trajectory_id": "ep_0002.behavior",
+      "behavior_result": {
+        "R_task": 1,
+        "C_comm": 0.0,
+        "comm_tokens": 0,
+        "n_steps": 3,
+        "n_asks": {
+          "B": 0,
+          "C": 0
+        },
+        "final_answer": "Zara Ahmed"
+      },
+      "roots": [
+        {
+          "state_id": "ep_0002_t0",
+          "scenario_id": "ep_0002",
+          "scenario_type": "A_self",
+          "depth": 0,
+          "step": 0,
+          "parent": null,
+          "policy_input": "[system]\nYou are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code).\n\n[user]\nTask question: Who manages the lead of Project Atlas?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 1 of 10.\nHistory of your actions and observations:\n(none yet)\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:",
+          "policy_messages": [
+            {
+              "role": "system",
+              "content": "You are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code)."
+            },
+            {
+              "role": "user",
+              "content": "Task question: Who manages the lead of Project Atlas?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 1 of 10.\nHistory of your actions and observations:\n(none yet)\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:"
+            }
+          ],
+          "sample_prob": 1.0,
+          "need_info": false,
+          "behavior_policy": "Qwen3-8B@v0",
+          "action_logprobs": null,
+          "children": {
+            "NO_COMM": {
+              "action": "NO_COMM",
+              "status": "expand",
+              "prune_decision": "EXPAND",
+              "prune_reason": "unparseable pruner reply; default EXPAND ('NO_COMM - I can LOOKUP my notes to find information about who manages the lead o')",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 404497442,
+                  "R_task": 0,
+                  "C_comm": 0.0,
+                  "n_steps": 2,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t0.NO_COMM.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 1138911119,
+                  "R_task": 1,
+                  "C_comm": 0.0,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t0.NO_COMM.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 347553513,
+                  "R_task": 0,
+                  "C_comm": 0.0,
+                  "n_steps": 2,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t0.NO_COMM.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 58542677,
+                  "R_task": 1,
+                  "C_comm": 0.0,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t0.NO_COMM.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 0.5,
+              "R_task_std": 0.5,
+              "C_comm_mean": 0.0,
+              "C_comm_std": 0.0,
+              "n_steps_mean": 2.5,
+              "subtree": [],
+              "expanded": true
+            },
+            "ASK_B": {
+              "action": "ASK_B",
+              "status": "prune",
+              "prune_decision": "PRUNE",
+              "prune_reason": "Asking B is not informative for determining who manages the lead of Project Atlas, as B's expertise is in People Ops (employee bases and management structure), not project leadership. The relevant information is more likely to be found with C.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 1376039821,
+                  "R_task": 0,
+                  "C_comm": 0.17,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t0.ASK_B.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 1437364004,
+                  "R_task": 0,
+                  "C_comm": 0.17,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t0.ASK_B.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 1715327723,
+                  "R_task": 0,
+                  "C_comm": 0.17,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t0.ASK_B.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 703435057,
+                  "R_task": 1,
+                  "C_comm": 0.17,
+                  "n_steps": 4,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t0.ASK_B.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 0.25,
+              "R_task_std": 0.433013,
+              "C_comm_mean": 0.17,
+              "C_comm_std": 0.0,
+              "n_steps_mean": 3.25,
+              "subtree": [],
+              "expanded": false
+            },
+            "ASK_C": {
+              "action": "ASK_C",
+              "status": "expand",
+              "prune_decision": "EXPAND",
+              "prune_reason": "C is the Project Office and knows who leads each project, which is directly relevant to identifying the lead of Project Atlas.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 1405293302,
+                  "R_task": 1,
+                  "C_comm": 0.11,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t0.ASK_C.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 828667289,
+                  "R_task": 1,
+                  "C_comm": 0.11,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t0.ASK_C.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 512824507,
+                  "R_task": 1,
+                  "C_comm": 0.11,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t0.ASK_C.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 228124329,
+                  "R_task": 1,
+                  "C_comm": 0.11,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t0.ASK_C.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 1.0,
+              "R_task_std": 0.0,
+              "C_comm_mean": 0.11,
+              "C_comm_std": 0.0,
+              "n_steps_mean": 3.0,
+              "subtree": [],
+              "expanded": true
+            }
+          },
+          "dropped": [],
+          "siblings_complete": true
+        },
+        {
+          "state_id": "ep_0002_t1",
+          "scenario_id": "ep_0002",
+          "scenario_type": "A_self",
+          "depth": 0,
+          "step": 1,
+          "parent": null,
+          "policy_input": "[system]\nYou are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code).\n\n[user]\nTask question: Who manages the lead of Project Atlas?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 2 of 10.\nHistory of your actions and observations:\n1. LOOKUP: Project Atlas\n   result: Project Atlas is led by Lucas Silva.\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:",
+          "policy_messages": [
+            {
+              "role": "system",
+              "content": "You are agent A, the executor in a three-agent team. You must answer the task question correctly. You have private notes that you can search with LOOKUP (free): it returns the note lines that mention the person or project names you search for, so search one name at a time and follow multi-step questions step by step. You may also ask teammate B or C, but every word sent or received in a conversation costs the team. Ask only when it is worth it. When you answer, give only the answer value (e.g. a city, a name, a code)."
+            },
+            {
+              "role": "user",
+              "content": "Task question: Who manages the lead of Project Atlas?\n\nTeammates:\n- B: People Ops - knows where each employee is based, who manages whom, and phone extensions.\n- C: Project Office - knows who leads each project, project review days and budget codes.\n\nStep 2 of 10.\nHistory of your actions and observations:\n1. LOOKUP: Project Atlas\n   result: Project Atlas is led by Lucas Silva.\n\nDecide your next move. Reply with exactly one label:\nNO_COMM - act on your own now (LOOKUP your notes or give the final ANSWER)\nASK_B - send a question to B\nASK_C - send a question to C\nLabel:"
+            }
+          ],
+          "sample_prob": 0.2,
+          "need_info": false,
+          "behavior_policy": "Qwen3-8B@v0",
+          "action_logprobs": null,
+          "children": {
+            "NO_COMM": {
+              "action": "NO_COMM",
+              "status": "expand",
+              "prune_decision": "EXPAND",
+              "prune_reason": "unparseable pruner reply; default EXPAND ('NO_COMM - I already know from the LOOKUP that Lucas Silva leads Project Atlas, s')",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 1510026932,
+                  "R_task": 1,
+                  "C_comm": 0.0,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t1.NO_COMM.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 1575756303,
+                  "R_task": 0,
+                  "C_comm": 0.0,
+                  "n_steps": 2,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t1.NO_COMM.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 944450432,
+                  "R_task": 1,
+                  "C_comm": 0.0,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t1.NO_COMM.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 1489599706,
+                  "R_task": 1,
+                  "C_comm": 0.0,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t1.NO_COMM.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 0.75,
+              "R_task_std": 0.433013,
+              "C_comm_mean": 0.0,
+              "C_comm_std": 0.0,
+              "n_steps_mean": 2.75,
+              "subtree": [],
+              "expanded": true
+            },
+            "ASK_B": {
+              "action": "ASK_B",
+              "status": "prune",
+              "prune_decision": "PRUNE",
+              "prune_reason": "Asking B is not informative because the lead of Project Atlas (Lucas Silva) has already been identified through the LOOKUP action, and the question about who manages the lead is more relevant to the Project Office, which is represented by C.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 706580871,
+                  "R_task": 0,
+                  "C_comm": 0.17,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t1.ASK_B.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 617508547,
+                  "R_task": 0,
+                  "C_comm": 0.11,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t1.ASK_B.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 1512833463,
+                  "R_task": 1,
+                  "C_comm": 0.17,
+                  "n_steps": 4,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t1.ASK_B.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 529323127,
+                  "R_task": 1,
+                  "C_comm": 0.17,
+                  "n_steps": 4,
+                  "n_asks": {
+                    "B": 1,
+                    "C": 0
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t1.ASK_B.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 0.5,
+              "R_task_std": 0.5,
+              "C_comm_mean": 0.155,
+              "C_comm_std": 0.025981,
+              "n_steps_mean": 3.5,
+              "subtree": [],
+              "expanded": false
+            },
+            "ASK_C": {
+              "action": "ASK_C",
+              "status": "expand",
+              "prune_decision": "EXPAND",
+              "prune_reason": "C knows who leads each project, which is directly relevant to identifying the manager of the lead for Project Atlas.",
+              "explore_override": false,
+              "rollouts": [
+                {
+                  "k": 0,
+                  "seed": 1795765825,
+                  "R_task": 0,
+                  "C_comm": 0.11,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t1.ASK_C.k0"
+                },
+                {
+                  "k": 1,
+                  "seed": 98031191,
+                  "R_task": 1,
+                  "C_comm": 0.14,
+                  "n_steps": 4,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t1.ASK_C.k1"
+                },
+                {
+                  "k": 2,
+                  "seed": 1101130515,
+                  "R_task": 1,
+                  "C_comm": 0.17,
+                  "n_steps": 4,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t1.ASK_C.k2"
+                },
+                {
+                  "k": 3,
+                  "seed": 1831105587,
+                  "R_task": 0,
+                  "C_comm": 0.12,
+                  "n_steps": 3,
+                  "n_asks": {
+                    "B": 0,
+                    "C": 1
+                  },
+                  "action_logprob": null,
+                  "trajectory_id": "ep_0002_t1.ASK_C.k3"
+                }
+              ],
+              "n": 4,
+              "R_task_mean": 0.5,
+              "R_task_std": 0.5,
+              "C_comm_mean": 0.135,
+              "C_comm_std": 0.022913,
+              "n_steps_mean": 3.5,
+              "subtree": [],
+              "expanded": true
+            }
+          },
+          "dropped": [],
+          "siblings_complete": true
+        }
+      ]
+    }
+  ]
+}
