@@ -258,7 +258,7 @@ class TestExportsAndMisc(unittest.TestCase):
             for split in ("train", "val", "test"):
                 sd = Path(d) / "splits" / split
                 ids = {s["scenario_id"] for s in read_jsonl(sd / "scenarios.jsonl")}
-                for fname in ("decisions.jsonl", "sft_lam0.05.jsonl", "rl_lam0.5.jsonl"):
+                for fname in ("decisions.jsonl", "sft_lam0.05_mu0.01.jsonl", "rl_lam0.5_mu0.01.jsonl"):
                     for r in read_jsonl(sd / fname):
                         sid = r.get("scenario_id") or r["state_id"].split("_t")[0]
                         self.assertIn(sid, ids, f"{fname} in {split} contains a foreign scenario")
@@ -269,7 +269,7 @@ class TestExportsAndMisc(unittest.TestCase):
             # test split keeps the true distribution: every complete decision point gets an SFT row
             sd = Path(d) / "splits" / "test"
             n_complete = sum(1 for r in read_jsonl(sd / "decisions.jsonl") if r["siblings_complete"])
-            self.assertEqual(len(read_jsonl(sd / "sft_lam0.05.jsonl")), n_complete)
+            self.assertEqual(len(read_jsonl(sd / "sft_lam0.05_mu0.01.jsonl")), n_complete)
             # scenario types are spread across splits
             self.assertGreaterEqual(len(m["splits"]["test"]["scenario_types"]), 2)
 
