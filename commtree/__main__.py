@@ -2,7 +2,7 @@
 
   python -m commtree gen-scenarios --config configs/mock.yaml --out runs/scenarios.jsonl
   python -m commtree build   --config configs/mock.yaml --out runs/mock
-  python -m commtree export  --run runs/mock --lam 0.05 [--mu 0] [--low-conf drop] [--ipw]
+  python -m commtree export  --run runs/mock --lam 0.05 [--mu 0.01] [--low-conf drop] [--ipw]
   python -m commtree report  --run runs/mock --lam 0.05
   python -m commtree check   --run runs/mock
   python -m commtree split   --run runs/mock --ratios 0.8 0.1 0.1 --lam 0.05
@@ -19,7 +19,7 @@ from .backends import BudgetExceeded
 from .config import build_datatree, build_policies, build_task
 from .export import export_all
 from .report import DEFAULT_LAMS, check_leakage, write_report
-from .utils import load_config, read_json, read_jsonl, write_jsonl
+from .utils import DEFAULT_MU, load_config, read_json, read_jsonl, write_jsonl
 
 
 def cmd_gen(a):
@@ -57,7 +57,7 @@ def cmd_build(a):
         for lam in lams:
             c = export_all(dt.raw(), Path(a.out) / "exports", lam=lam, mu=a.mu)
             print(f"  exports (λ={lam}): {c}")
-        write_report(read_json(paths["tree"]), dt.scenarios, a.out, lam=lams[0])
+        write_report(read_json(paths["tree"]), dt.scenarios, a.out, lam=lams[0], mu=a.mu)
         print(f"  report: {Path(a.out) / 'report.md'}  viewer: {Path(a.out) / 'viewer.html'}")
 
 
@@ -73,7 +73,7 @@ def cmd_export(a):
 def cmd_report(a):
     raw = read_json(Path(a.run) / "tree.json")
     sc = read_jsonl(Path(a.run) / "scenarios.jsonl")
-    r = write_report(raw, sc, a.run, lam=a.lam, lams=a.lams or DEFAULT_LAMS)
+    r = write_report(raw, sc, a.run, lam=a.lam, lams=a.lams or DEFAULT_LAMS, mu=a.mu)
     print(json.dumps(r["headroom"], indent=2))
     print(f"leaks: {r['leakage']['n_leaks']}  -> {Path(a.run) / 'report.md'}")
 
@@ -114,23 +114,24 @@ def main(argv=None):
     b = s.add_parser("build"); b.add_argument("--config", required=True); b.add_argument("--out", required=True)
     b.add_argument("--scenarios", help="jsonl of scenarios (overrides the config)")
     b.add_argument("--n-scenarios", type=int); b.add_argument("--resume", help="previous tree.json to reuse")
-    b.add_argument("--lams", type=float, nargs="*"); b.add_argument("--mu", type=float, default=0.0)
+    b.add_argument("--lams", type=float, nargs="*"); b.add_argument("--mu", type=float, default=DEFAULT_MU)
     b.add_argument("--no-export", action="store_true"); b.set_defaults(f=cmd_build)
 
     e = s.add_parser("export"); e.add_argument("--run", required=True); e.add_argument("--out")
-    e.add_argument("--lam", type=float, nargs="+", default=[0.05]); e.add_argument("--mu", type=float, default=0.0)
+    e.add_argument("--lam", type=float, nargs="+", default=[0.05]); e.add_argument("--mu", type=float, default=DEFAULT_MU)
     e.add_argument("--z", type=float, default=2.0); e.add_argument("--low-conf", choices=["mark", "drop"], default="mark")
     e.add_argument("--no-balance", action="store_true"); e.add_argument("--nocomm-ratio", type=float, default=2.0)
     e.add_argument("--ipw", action="store_true"); e.add_argument("--max-pairs", type=int, default=2)
     e.set_defaults(f=cmd_export)
 
     r = s.add_parser("report"); r.add_argument("--run", required=True); r.add_argument("--lam", type=float, default=0.05)
+    r.add_argument("--mu", type=float, default=DEFAULT_MU)
     r.add_argument("--lams", type=float, nargs="*"); r.set_defaults(f=cmd_report)
 
     sp = s.add_parser("split", help="scenario-level train/val/test split + per-split exports")
     sp.add_argument("--run", required=True); sp.add_argument("--out")
     sp.add_argument("--ratios", type=float, nargs=3, default=[0.8, 0.1, 0.1]); sp.add_argument("--seed", type=int, default=0)
-    sp.add_argument("--lam", type=float, nargs="+", default=[0.05]); sp.add_argument("--mu", type=float, default=0.0)
+    sp.add_argument("--lam", type=float, nargs="+", default=[0.05]); sp.add_argument("--mu", type=float, default=DEFAULT_MU)
     sp.add_argument("--z", type=float, default=2.0); sp.add_argument("--low-conf", choices=["mark", "drop"], default="mark")
     sp.add_argument("--no-balance", action="store_true"); sp.add_argument("--nocomm-ratio", type=float, default=2.0)
     sp.add_argument("--ipw", action="store_true"); sp.add_argument("--max-pairs", type=int, default=2)

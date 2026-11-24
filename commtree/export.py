@@ -14,11 +14,11 @@ from pathlib import Path
 
 from .datatree import iter_nodes
 from .pruners import q_values
-from .utils import ACTIONS, derive_seed, mean, stderr, write_json, write_jsonl
+from .utils import ACTIONS, DEFAULT_MU, derive_seed, mean, stderr, write_json, write_jsonl
 
 
 # ------------------------------------------------------------------ helpers
-def action_q(node: dict, lam: float, mu: float = 0.0) -> dict[str, dict]:
+def action_q(node: dict, lam: float, mu: float = DEFAULT_MU) -> dict[str, dict]:
     out = {}
     for a, c in node["children"].items():
         ro = c.get("rollouts") or []
@@ -66,7 +66,7 @@ def export_decisions(raw: dict, **_) -> list[dict]:
 
 
 # ------------------------------------------------------------------ SFT
-def export_sft(raw: dict, lam: float, mu: float = 0.0, z: float = 2.0, low_conf: str = "mark",
+def export_sft(raw: dict, lam: float, mu: float = DEFAULT_MU, z: float = 2.0, low_conf: str = "mark",
                low_conf_weight: float = 0.3, balance: bool = True, nocomm_ratio: float = 2.0,
                ipw: bool = False, seed: int = 0, **_) -> list[dict]:
     rows = []
@@ -121,7 +121,7 @@ def _balance(rows, ratio, seed):
 
 
 # ------------------------------------------------------------------ DPO
-def export_dpo(raw: dict, lam: float, mu: float = 0.0, z: float = 2.0, max_pairs: int = 2, ipw: bool = False, **_) -> list[dict]:
+def export_dpo(raw: dict, lam: float, mu: float = DEFAULT_MU, z: float = 2.0, max_pairs: int = 2, ipw: bool = False, **_) -> list[dict]:
     rows = []
     for node in iter_nodes(raw):
         q = action_q(node, lam, mu)
@@ -145,7 +145,7 @@ def export_dpo(raw: dict, lam: float, mu: float = 0.0, z: float = 2.0, max_pairs
 
 
 # ------------------------------------------------------------------ RL
-def export_rl(raw: dict, lam: float, mu: float = 0.0, contrast_threshold: float = 0.2, **_) -> list[dict]:
+def export_rl(raw: dict, lam: float, mu: float = DEFAULT_MU, contrast_threshold: float = 0.2, **_) -> list[dict]:
     rows = []
     for node in iter_nodes(raw):
         q = action_q(node, lam, mu)
@@ -179,13 +179,13 @@ def export_rl(raw: dict, lam: float, mu: float = 0.0, contrast_threshold: float 
 EXPORTERS = {"decisions": export_decisions, "sft": export_sft, "dpo": export_dpo, "rl": export_rl}
 
 
-def export(raw: dict, fmt: str, lam: float = 0.05, mu: float = 0.0, **kw) -> list[dict]:
+def export(raw: dict, fmt: str, lam: float = 0.05, mu: float = DEFAULT_MU, **kw) -> list[dict]:
     if fmt not in EXPORTERS:
         raise ValueError(f"unknown format {fmt!r}; choose from {list(EXPORTERS)}")
     return EXPORTERS[fmt](raw, lam=lam, mu=mu, **kw)
 
 
-def export_all(raw: dict, out_dir: str, lam: float = 0.05, mu: float = 0.0, formats=("decisions", "sft", "dpo", "rl"), **kw) -> dict:
+def export_all(raw: dict, out_dir: str, lam: float = 0.05, mu: float = DEFAULT_MU, formats=("decisions", "sft", "dpo", "rl"), **kw) -> dict:
     p = Path(out_dir)
     p.mkdir(parents=True, exist_ok=True)
     counts = {}

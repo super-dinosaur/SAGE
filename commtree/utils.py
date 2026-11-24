@@ -9,6 +9,10 @@ from pathlib import Path
 from typing import Any, Iterable
 
 ACTIONS = ("NO_COMM", "ASK_B", "ASK_C")
+# Default step cost μ applied at export / in CommEnv: R = R_task − λ·C_comm − μ·n_steps.
+# Small but non-zero so that "wait a step, then ask" no longer ties with "ask now" (ties break
+# toward NO_COMM, which would teach procrastination). Generation-time pruning still uses μ = 0.
+DEFAULT_MU = 0.01
 ASK_TARGET = {"ASK_B": "B", "ASK_C": "C"}
 
 

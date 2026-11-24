@@ -23,7 +23,7 @@ from typing import Any, Generator
 from .backends import Request, Response, Router, parse_label
 from .policies import Policies
 from .pruners import LLMPruner, Pruner, ThresholdPruner, q_values
-from .utils import ACTIONS, derive_seed, mean, pstd, read_json, stable_hash, stderr
+from .utils import ACTIONS, DEFAULT_MU, derive_seed, mean, pstd, read_json, stable_hash, stderr
 
 SCHEMA_VERSION = "commtree/1"
 
@@ -333,7 +333,7 @@ class DataTree:
                 "k": k, "seed": seed, "result": out["result"], "events": out["events"]}
 
     # ================================================================ output
-    def get_data(self, fmt: str = "json", lam: float = 0.05, mu: float = 0.0, **kw):
+    def get_data(self, fmt: str = "json", lam: float = 0.05, mu: float = DEFAULT_MU, **kw):
         if not self._built:
             raise RuntimeError("call build() first")
         raw = self.raw()
