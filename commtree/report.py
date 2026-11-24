@@ -9,7 +9,7 @@ from pathlib import Path
 from .datatree import iter_nodes
 from .export import action_q, export_sft
 from .tasks.communication import CommunicationTask
-from .utils import ACTIONS, mean
+from .utils import ACTIONS, DEFAULT_MU, mean
 
 DEFAULT_LAMS = [0.0, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0]  # C_comm is in units of 100 tokens
 
@@ -65,7 +65,7 @@ def check_leakage(raw: dict, scenarios: list[dict], task: CommunicationTask | No
 
 
 # ------------------------------------------------------------------ policy values
-def policy_values(raw: dict, lam: float, mu: float = 0.0, ipw: bool = True) -> dict:
+def policy_values(raw: dict, lam: float, mu: float = DEFAULT_MU, ipw: bool = True) -> dict:
     """Value of fixed first-action policies over complete decision points (headroom, §13.4)."""
     pols = {"oracle": None, "never_ask": "NO_COMM", "always_B": "ASK_B", "always_C": "ASK_C", "always_ask_best": "ASKBEST"}
     acc = {p: {"V": [], "succ": [], "cost": [], "w": []} for p in pols}
@@ -91,7 +91,7 @@ def policy_values(raw: dict, lam: float, mu: float = 0.0, ipw: bool = True) -> d
     return out
 
 
-def lambda_sweep(raw: dict, lams=DEFAULT_LAMS, mu: float = 0.0) -> list[dict]:
+def lambda_sweep(raw: dict, lams=DEFAULT_LAMS, mu: float = DEFAULT_MU) -> list[dict]:
     rows = []
     for lam in lams:
         pv = policy_values(raw, lam, mu)
@@ -131,13 +131,14 @@ def summarize(raw: dict, scenarios: list[dict], trajectories: list[dict] | None 
     }
 
 
-def write_report(raw: dict, scenarios: list[dict], out_dir: str, lam: float = 0.05, lams=DEFAULT_LAMS) -> dict:
+def write_report(raw: dict, scenarios: list[dict], out_dir: str, lam: float = 0.05, lams=DEFAULT_LAMS,
+                 mu: float = DEFAULT_MU) -> dict:
     p = Path(out_dir)
     p.mkdir(parents=True, exist_ok=True)
     summ = summarize(raw, scenarios, lam=lam)
     leak = check_leakage(raw, scenarios)
-    sweep = lambda_sweep(raw, lams)
-    head = policy_values(raw, lam)
+    sweep = lambda_sweep(raw, lams, mu)
+    head = policy_values(raw, lam, mu)
     # csv
     cols = ["lam", "policy", "value", "success", "cost", "n_states"]
     with open(p / "lambda_sweep.csv", "w") as f:
@@ -146,7 +147,7 @@ def write_report(raw: dict, scenarios: list[dict], out_dir: str, lam: float = 0.
             if r["policy"] != "_labels":
                 f.write(",".join(str(r.get(c, "")) for c in cols) + "\n")
     lab_rows = [r for r in sweep if r["policy"] == "_labels"]
-    md = ["# DataTree report", "", f"λ for headline numbers: {lam}", "", "## Summary", "```json",
+    md = ["# DataTree report", "", f"λ for headline numbers: {lam}   μ (step cost): {mu}", "", "## Summary", "```json",
           json.dumps(summ, indent=2, ensure_ascii=False), "```", "", f"## Headroom at λ={lam} (IPW-weighted, complete decision points)",
           "", "| policy | value | success | cost | n |", "|---|---|---|---|---|"]
     for k, v in head.items():
@@ -169,12 +170,12 @@ def write_report(raw: dict, scenarios: list[dict], out_dir: str, lam: float = 0.
     (p / "report.md").write_text("\n".join(md) + "\n", encoding="utf-8")
     (p / "report.json").write_text(json.dumps({"summary": summ, "headroom": head, "leakage": leak, "sweep": sweep}, indent=2,
                                               ensure_ascii=False), encoding="utf-8")
-    write_viewer(raw, p / "viewer.html")
+    write_viewer(raw, p / "viewer.html", lam=lam, mu=mu)
     return {"summary": summ, "headroom": head, "leakage": leak}
 
 
 # ------------------------------------------------------------------ viewer
-def write_viewer(raw: dict, path, lam: float = 0.05, max_nodes: int = 400) -> None:
+def write_viewer(raw: dict, path, lam: float = 0.05, max_nodes: int = 400, mu: float = DEFAULT_MU) -> None:
     esc = html.escape
     count = [0]
 
@@ -182,7 +183,7 @@ def write_viewer(raw: dict, path, lam: float = 0.05, max_nodes: int = 400) -> No
         count[0] += 1
         if count[0] > max_nodes:
             return ""
-        q = action_q(n, lam)
+        q = action_q(n, lam, mu)
         rows = []
         for a, c in n["children"].items():
             qa = q.get(a, {}).get("Q")
@@ -211,5 +212,5 @@ section{{background:var(--card);border:1px solid var(--bd);border-radius:8px;pad
 h2{{font-size:15px}} small{{color:var(--mut);font-weight:400}} details{{margin:4px 0 4px 12px}}
 pre{{white-space:pre-wrap;font-size:12px;background:var(--bg);padding:8px;border-radius:6px;overflow-x:auto}}
 .why{{color:var(--mut);font-size:12px;margin-left:12px}}
-</style></head><body><h1>DataTree Viewer</h1><p>Q shown at λ={lam}. Click to expand.</p>{''.join(body)}</body></html>"""
+</style></head><body><h1>DataTree Viewer</h1><p>Q shown at λ={lam}, μ={mu}. Click to expand.</p>{''.join(body)}</body></html>"""
     Path(path).write_text(doc, encoding="utf-8")

@@ -10,11 +10,11 @@ from __future__ import annotations
 import random
 
 from .backends import Request, Router
-from .utils import ACTIONS, derive_seed
+from .utils import ACTIONS, DEFAULT_MU, derive_seed
 
 
 class CommEnv:
-    def __init__(self, task, router: Router, lam: float = 0.05, mu: float = 0.0):
+    def __init__(self, task, router: Router, lam: float = 0.05, mu: float = DEFAULT_MU):
         self.task, self.router, self.lam, self.mu = task, router, lam, mu
         self.state = None
         self._seed = 0

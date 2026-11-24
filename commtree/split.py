@@ -14,7 +14,7 @@ import random
 from pathlib import Path
 
 from .export import export
-from .utils import derive_seed, read_json, read_jsonl, write_json, write_jsonl
+from .utils import DEFAULT_MU, derive_seed, read_json, read_jsonl, write_json, write_jsonl
 
 SPLITS = ("train", "val", "test")
 
@@ -67,7 +67,7 @@ def filter_raw(raw: dict, ids: set[str], split: str) -> dict:
 
 
 def write_splits(run_dir: str, out_dir: str | None = None, ratios=(0.8, 0.1, 0.1), seed: int = 0,
-                 lams=(0.05,), mu: float = 0.0, **export_kw) -> dict:
+                 lams=(0.05,), mu: float = DEFAULT_MU, **export_kw) -> dict:
     run = Path(run_dir)
     out = Path(out_dir) if out_dir else run / "splits"
     raw = read_json(run / "tree.json")
